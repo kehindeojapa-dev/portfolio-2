@@ -1,0 +1,15 @@
+#about_container ul {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+#about_container ul li {
+  list-style: none;
+  font-size: 1.2em;
+  background-color: var(--color5);
+  padding: 0.3em;
+  border-radius: 5px;
+  margin-bottom: 0.3em;
+  margin-right: 0.3em;
+}
