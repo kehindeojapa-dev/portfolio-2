@@ -219,10 +219,11 @@ body {
 .container section {
   margin: 8vh 0px;
 }
+
 #used div {
   font-size: 14px !important;
   display: inline-block;
-  padding: 8px 10px;
+  padding: 4px 10px;
   border: 2px solid #fff;
   margin: 0px 10px;
   border-radius: 50px;
@@ -247,10 +248,10 @@ body {
   /* background: transparent; */
   background: var(--color5);
   border: 3px solid #fff;
-  padding: 8px 40px;
+  padding: 4px 20px;
   border-radius: 80px;
   font-weight: bold;
-  margin: 2vh 10px;
+  /* margin: 2vh 10px; */
   transition: 0.4s ease-in-out;
 }
 .btn_one:hover {
@@ -267,7 +268,7 @@ body {
   /* background: #fff; */
   background: var(--color5);
   border: 3px solid #fff;
-  padding: 8px 40px;
+  padding: 4px 20px;
   border-radius: 80px;
   font-weight: bold;
   margin: 2vh 10px;
@@ -275,7 +276,7 @@ body {
 }
 .btn_two:hover {
   cursor: pointer;
-  padding: 8px 60px;
+  padding: 4px 40px;
   color: var(--color5);
   background: var(--color1);
 }
