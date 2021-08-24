@@ -83,7 +83,7 @@
     <div id="middle" class="animated slideInDown" style="animation-delay: 2s">
       <h1>Kehinde Ojapa.</h1>
       <h2>Software Developer / Human</h2>
-      <a href="#" class="cv" download>Download CV</a>
+      <a href="./cv/kehinde_ojapa_cv.pdf" class="cv" download>Download CV</a>
 
       <div id="menu">
         <a onclick="showabout()">about</a>
@@ -119,95 +119,80 @@
       <div onclick="closework()" class="close-work">
         <i class="fas fa-angle-right"></i>
       </div>
-      <h1>works.</h1>
+      <h1 class="work_container_intro">works.</h1>
 
-      <!-- Enipere - P5 -->
-      <section class="work_item">
-        <h2>EniPere</h2>
-        <p>
-          A blog for writers and readers, writers can create accounts and upload
-          posts for their readers, readers can comment on a post. Writers also
-          have a corner page to showcase articles that is only from them.
-        </p>
-        <div id="used">
-          <div><i class="fas fa-circle"></i>&nbsp;React</div>
-          <div><i class="fas fa-circle"></i>&nbsp;Node</div>
-          <div><i class="fas fa-circle"></i>&nbsp;Express</div>
-          <div><i class="fas fa-circle"></i>&nbsp;MongoDB</div>
-          <div><i class="fas fa-circle"></i>&nbsp;Mongoose</div>
-        </div>
-        <a href="https://github.com/kehindeojapa-dev/enipere-frontend"
-          ><button class="btn_one">Code</button></a
-        >
-        <a href="enipere.netlify.app"><button class="btn_two">Live</button></a>
-      </section>
+      <div class="work_items">
+        <!-- Movie App - P4 -->
+        <section class="work_item">
+          <h2>Movie App</h2>
+          <img src="./projectPic/p4.png" alt="project picture" loading="lazy" />
+          <p>
+            A web app that fetches movie from the TMDB api based on the movie
+            category, trailer and stream option is available to the movies
+            fetched. Search functionaliy is also present.
+          </p>
+          <div id="used">
+            <div><i class="fas fa-circle"></i>&nbsp;HTML5</div>
+            <div><i class="fas fa-circle"></i>&nbsp;CSS3</div>
+            <div><i class="fas fa-circle"></i>&nbsp;Javascript</div>
+          </div>
+          <a href="https://github.com/kehindeojapa-dev/enipere-frontend"
+            ><button class="btn_one">Code</button></a
+          >
+          <a href="#"><button class="btn_two">Live</button></a>
+        </section>
+        <!-- Job Listing - P3 -->
+        <section class="work_item">
+          <h2>Job Listing</h2>
+          <img src="./projectPic/p3.png" alt="project picture" loading="lazy" />
+          <p>
+            A simple web app that can filter jobs according to the job criteria
+            chosen
+          </p>
+          <div id="used">
+            <div><i class="fas fa-circle"></i>&nbsp;HTML5</div>
+            <div><i class="fas fa-circle"></i>&nbsp;CSS3</div>
+            <div><i class="fas fa-circle"></i>&nbsp;Javascript</div>
+          </div>
+          <a href="#"><button class="btn_one">Code</button></a>
+          <a href="#"><button class="btn_two">Live</button></a>
+        </section>
 
-      <!-- Movie App - P4 -->
-      <section class="work_item">
-        <h2>Movie App</h2>
-        <p>
-          A web app that fetches movie from the TMDB api based on the movie
-          category, trailer and stream option is available to the movies
-          fetched. Search functionaliy is also present.
-        </p>
-        <div id="used">
-          <div><i class="fas fa-circle"></i>&nbsp;HTML5</div>
-          <div><i class="fas fa-circle"></i>&nbsp;CSS3</div>
-          <div><i class="fas fa-circle"></i>&nbsp;Javascript</div>
-        </div>
-        <a href="https://github.com/kehindeojapa-dev/enipere-frontend"
-          ><button class="btn_one">Code</button></a
-        >
-        <a href="#"><button class="btn_two">Live</button></a>
-      </section>
+        <!-- JS Mini Project - P2 -->
+        <section class="work_item">
+          <h2>JS Projects Mini</h2>
+          <img src="./projectPic/p2.png" alt="project picture" loading="lazy" />
 
-      <!-- Job Listing - P3 -->
-      <section class="work_item">
-        <h2>Job Listing</h2>
-        <p>
-          A simple web app that can filter jobs according to the job criteria
-          chosen
-        </p>
-        <div id="used">
-          <div><i class="fas fa-circle"></i>&nbsp;HTML5</div>
-          <div><i class="fas fa-circle"></i>&nbsp;CSS3</div>
-          <div><i class="fas fa-circle"></i>&nbsp;Javascript</div>
-        </div>
-        <a href="#"><button class="btn_one">Code</button></a>
-        <a href="#"><button class="btn_two">Live</button></a>
-      </section>
+          <p>
+            Created simple webpage interactions using JavaScript; had fun
+            implementing carousels, navbars, to-do lists, remake of facebook
+            login and signup page, simple facebook post creation.
+          </p>
+          <div id="used">
+            <div><i class="fas fa-circle"></i>&nbsp;HTML5</div>
+            <div><i class="fas fa-circle"></i>&nbsp;CSS3</div>
+            <div><i class="fas fa-circle"></i>&nbsp;Javascript</div>
+          </div>
+          <a href="#"><button class="btn_one">Code</button></a>
+          <a href="#"><button class="btn_two">Live</button></a>
+        </section>
 
-      <!-- JS Mini Project - P2 -->
-      <section class="work_item">
-        <h2>JS Projects Mini</h2>
-        <p>
-          Created simple webpage interactions using JavaScript; had fun
-          implementing carousels, navbars, to-do lists, remake of facebook login
-          and signup page, simple facebook post creation.
-        </p>
-        <div id="used">
-          <div><i class="fas fa-circle"></i>&nbsp;HTML5</div>
-          <div><i class="fas fa-circle"></i>&nbsp;CSS3</div>
-          <div><i class="fas fa-circle"></i>&nbsp;Javascript</div>
-        </div>
-        <a href="#"><button class="btn_one">Code</button></a>
-        <a href="#"><button class="btn_two">Live</button></a>
-      </section>
-
-      <!-- Landing Pages - P1 -->
-      <section class="work_item">
-        <h2>Landing Pages</h2>
-        <p>
-          A simple website containing bunch of landing pages, designs was gotten
-          from the frontendmentor.io challenge series.
-        </p>
-        <div id="used">
-          <div><i class="fas fa-circle"></i>&nbsp;HTML5</div>
-          <div><i class="fas fa-circle"></i>&nbsp;CSS3</div>
-        </div>
-        <a href="#"><button class="btn_one">Code</button></a>
-        <a href="#"><button class="btn_two">Live</button></a>
-      </section>
+        <!-- Landing Pages - P1 -->
+        <section class="work_item">
+          <h2>Landing Pages</h2>
+          <img src="./projectPic/p1.png" alt="project picture" loading="lazy" />
+          <p>
+            A simple website containing bunch of landing pages, designs was
+            gotten from the frontendmentor.io challenge series.
+          </p>
+          <div id="used">
+            <div><i class="fas fa-circle"></i>&nbsp;HTML5</div>
+            <div><i class="fas fa-circle"></i>&nbsp;CSS3</div>
+          </div>
+          <a href="#"><button class="btn_one">Code</button></a>
+          <a href="#"><button class="btn_two">Live</button></a>
+        </section>
+      </div>
     </div>
     <div id="about_container" class="container">
       <div onclick="closeabout()"><i class="fas fa-angle-left"></i></div>
