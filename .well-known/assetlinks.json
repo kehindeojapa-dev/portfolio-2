@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.leadway.mobileOne",
+      "sha256_cert_fingerprints": [
+        "0F:45:0C:00:39:69:3A:22:8E:1B:D1:38:6E:8D:1E:CA:81:F2:BD:24:DA:B9:AE:A7:A3:AF:50:78:BF:27:0A:9A"
+      ]
+    }
+  }
+]
