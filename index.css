@@ -104,6 +104,7 @@ body {
 #middle h1 {
   /* color: rgb(255, 50, 50); */
   color: var(--color4);
+  color: var(--color1);
   font-size: 70px;
   text-decoration: underline;
 }
