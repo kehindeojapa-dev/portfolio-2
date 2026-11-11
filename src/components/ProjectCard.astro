@@ -1,0 +1,37 @@
+---
+import { Image } from "astro:assets";
+import ProjectLinks from "./ProjectLinks.astro";
+import type { Project } from "../data/projects";
+
+interface Props {
+  project: Project;
+}
+const { project } = Astro.props;
+---
+
+<article
+  data-reveal
+  class="group flex flex-col overflow-hidden rounded-xl border border-line bg-card transition-colors hover:border-accent/30"
+>
+  {
+    project.image && (
+      <div class="aspect-[16/10] overflow-hidden border-b border-line bg-bg">
+        <Image
+          src={project.image}
+          alt={`${project.title} screenshot`}
+          widths={[360, 540, 720]}
+          sizes="(min-width: 1024px) 320px, (min-width: 640px) 50vw, 100vw"
+          class="size-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
+        />
+      </div>
+    )
+  }
+  <div class="flex flex-1 flex-col gap-3 p-5">
+    <h3 class="font-semibold tracking-tight">{project.title}</h3>
+    <p class="text-sm text-muted">{project.summary}</p>
+    <p class="font-mono text-[11px] text-subtle">{project.tags.join(" · ")}</p>
+    <div class="mt-auto pt-2">
+      <ProjectLinks project={project} size="sm" />
+    </div>
+  </div>
+</article>
