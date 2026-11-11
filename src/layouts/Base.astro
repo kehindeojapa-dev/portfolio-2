@@ -1,0 +1,122 @@
+---
+import "../styles/global.css";
+import { site } from "../data/site";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title = `${site.name}, ${site.role}`, description = site.description } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL("/og.png", Astro.site);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta name="theme-color" content="#09090b" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#fafafa" media="(prefers-color-scheme: light)" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <script is:inline>
+      // Set theme before paint to avoid a flash
+      (() => {
+        const root = document.documentElement;
+        root.classList.add("js");
+        let stored = null;
+        try { stored = localStorage.getItem("theme"); } catch {}
+        const dark = stored ? stored === "dark" : !matchMedia("(prefers-color-scheme: light)").matches;
+        root.classList.toggle("dark", dark);
+      })();
+    </script>
+
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Person",
+        name: site.name,
+        jobTitle: site.role,
+        url: Astro.site?.toString(),
+        email: `mailto:${site.email}`,
+        address: { "@type": "PostalAddress", addressLocality: "Lagos", addressCountry: "NG" },
+        sameAs: site.socials.map((s) => s.href),
+      })}
+    />
+  </head>
+  <body class="min-h-dvh">
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-fg focus:px-3 focus:py-2 focus:text-bg"
+      >Skip to content</a
+    >
+    <slot />
+
+    <script>
+      // Theme toggle
+      document.querySelectorAll<HTMLButtonElement>("[data-theme-toggle]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const dark = document.documentElement.classList.toggle("dark");
+          try {
+            localStorage.setItem("theme", dark ? "dark" : "light");
+          } catch {}
+        });
+      });
+
+      // Header border once scrolled
+      const header = document.querySelector<HTMLElement>("[data-header]");
+      const onScroll = () => header?.toggleAttribute("data-scrolled", scrollY > 8);
+      onScroll();
+      addEventListener("scroll", onScroll, { passive: true });
+
+      // Scroll reveal, with a small stagger for cards that share a grid row
+      const items = document.querySelectorAll<HTMLElement>("[data-reveal]");
+      items.forEach((el) => {
+        const siblings = [...(el.parentElement?.children ?? [])].filter((c) => c.hasAttribute("data-reveal"));
+        const cols = el.parentElement?.classList.contains("grid") ? 3 : 1;
+        if (cols > 1) el.style.setProperty("--reveal-delay", `${(siblings.indexOf(el) % cols) * 90}ms`);
+      });
+      if ("IntersectionObserver" in window) {
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const e of entries) {
+              if (e.isIntersecting) {
+                e.target.classList.add("is-visible");
+                io.unobserve(e.target);
+              }
+            }
+          },
+          { rootMargin: "0px 0px -10% 0px" },
+        );
+        items.forEach((el) => io.observe(el));
+      } else {
+        items.forEach((el) => el.classList.add("is-visible"));
+      }
+
+      // Copy email
+      document.querySelectorAll<HTMLButtonElement>("[data-copy]").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+          try {
+            await navigator.clipboard.writeText(btn.dataset.copy ?? "");
+            btn.dataset.copied = "true";
+            setTimeout(() => delete btn.dataset.copied, 1800);
+          } catch {}
+        });
+      });
+    </script>
+  </body>
+</html>

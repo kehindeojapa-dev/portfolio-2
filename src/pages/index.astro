@@ -1,0 +1,240 @@
+---
+import { Image } from "astro:assets";
+import Base from "../layouts/Base.astro";
+import Header from "../components/Header.astro";
+import Icon from "../components/Icon.astro";
+import FeaturedProject from "../components/FeaturedProject.astro";
+import Experience from "../components/Experience.astro";
+import { site } from "../data/site";
+import { projects } from "../data/projects";
+
+const featured = projects.filter((p) => p.featured);
+const year = new Date().getFullYear();
+---
+
+<Base>
+  <Header />
+
+  <main id="main">
+    <!-- Hero -->
+    <section id="top" class="relative isolate overflow-hidden">
+      <div class="hero-bg pointer-events-none absolute inset-0 -z-10" aria-hidden="true"></div>
+      <div class="mx-auto max-w-5xl px-4 pt-20 pb-24 sm:px-6 sm:pt-28 sm:pb-32">
+        <p style="--i:0" class="hero-in inline-flex items-center gap-2 rounded-full border border-line bg-card/60 px-3 py-1 font-mono text-xs text-muted backdrop-blur">
+          <span class="relative flex size-2">
+            <span class="absolute inline-flex size-full animate-ping rounded-full bg-emerald-500 opacity-60 motion-reduce:hidden"></span>
+            <span class="relative inline-flex size-2 rounded-full bg-emerald-500"></span>
+          </span>
+          {site.role} · {site.location}
+        </p>
+
+        <h1 style="--i:1" class="hero-in mt-6 max-w-3xl text-4xl font-semibold tracking-tight text-balance sm:text-6xl">
+          {site.headline}
+        </h1>
+        <p style="--i:2" class="hero-in mt-6 max-w-2xl text-lg text-pretty text-muted">
+          Hi, I'm <span class="text-fg">{site.name}</span>. {site.intro}
+        </p>
+
+        <div style="--i:3" class="hero-in mt-10 flex flex-wrap items-center gap-3">
+          <a
+            href="#work"
+            class="nudge inline-flex h-11 items-center gap-2 rounded-lg bg-fg px-5 text-sm font-medium text-bg transition-opacity hover:opacity-90"
+          >
+            View selected work
+            <Icon name="arrow-down" class="size-4" />
+          </a>
+          <a
+            href={`mailto:${site.email}`}
+            class="inline-flex h-11 items-center gap-2 rounded-lg border border-line bg-card px-5 text-sm font-medium transition-colors hover:bg-card-hover"
+          >
+            <Icon name="mail" class="size-4" />
+            Get in touch
+          </a>
+          <ul class="ml-1 flex items-center gap-1">
+            {
+              site.socials.map((s) => (
+                <li>
+                  <a
+                    href={s.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="grid size-11 place-items-center rounded-lg text-muted transition-colors hover:bg-card-hover hover:text-fg"
+                    aria-label={s.label}
+                  >
+                    <Icon name={s.icon} class="size-5" />
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+
+        <dl style="--i:4" class="hero-in mt-16 grid max-w-3xl grid-cols-2 gap-6 border-t border-line pt-8 sm:grid-cols-4">
+          <div>
+            <dt class="text-xs text-subtle">Experience</dt>
+            <dd class="mt-1 text-2xl font-semibold tracking-tight">{site.yearsExperience} years</dd>
+          </div>
+          <div>
+            <dt class="text-xs text-subtle">Products shipped</dt>
+            <dd class="mt-1 text-2xl font-semibold tracking-tight">{site.productsShipped}</dd>
+          </div>
+          <div>
+            <dt class="text-xs text-subtle">Platforms</dt>
+            <dd class="mt-1 text-2xl font-semibold tracking-tight">Web · iOS · Android</dd>
+          </div>
+          <div>
+            <dt class="text-xs text-subtle">Largest install base</dt>
+            <dd class="mt-1 text-2xl font-semibold tracking-tight">100K+</dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- Selected work -->
+    <section id="work" class="mx-auto max-w-5xl px-4 py-20 sm:px-6">
+      <div class="mb-10 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p class="font-mono text-xs text-accent">// selected work</p>
+          <h2 class="mt-2 text-3xl font-semibold tracking-tight">Products in production</h2>
+        </div>
+        <p class="max-w-sm text-sm text-muted">
+          Web platforms and mobile apps, built across the frontend and the backend.
+        </p>
+      </div>
+      <div class="flex flex-col gap-6">
+        {featured.map((project, i) => <FeaturedProject project={project} index={i} />)}
+      </div>
+    </section>
+
+
+    <Experience />
+
+    <!-- About -->
+    <section id="about" class="border-y border-line bg-card/50">
+      <div class="mx-auto grid max-w-5xl gap-12 px-4 py-20 sm:px-6 md:grid-cols-[1fr_1.4fr]">
+        <div data-reveal class="space-y-6">
+          <div>
+            <p class="font-mono text-xs text-accent">// about</p>
+            <h2 class="mt-2 text-3xl font-semibold tracking-tight">A bit about me</h2>
+          </div>
+          <Image
+            src={site.portrait}
+            alt={`Portrait of ${site.name}`}
+            widths={[280, 420, 560]}
+            sizes="(min-width: 768px) 280px, 60vw"
+            class="aspect-[4/5] w-full max-w-72 rounded-2xl border border-line object-cover object-top"
+          />
+        </div>
+
+        <div data-reveal class="space-y-10">
+          <div class="space-y-4 text-lg text-pretty text-muted">
+            {site.bio.map((p) => <p>{p}</p>)}
+          </div>
+
+          <div>
+            <h3 class="mb-4 text-sm font-semibold">Toolkit</h3>
+            <dl class="divide-y divide-line rounded-xl border border-line bg-bg">
+              {
+                site.skills.map((s) => (
+                  <div class="grid gap-2 px-5 py-4 sm:grid-cols-[8rem_1fr] sm:items-baseline">
+                    <dt class="font-mono text-xs text-subtle">{s.group}</dt>
+                    <dd class="flex flex-wrap gap-x-4 gap-y-1 text-sm">
+                      {s.items.map((item) => <span>{item}</span>)}
+                    </dd>
+                  </div>
+                ))
+              }
+            </dl>
+          </div>
+
+          <div class="grid gap-8 sm:grid-cols-2">
+            <div>
+              <h3 class="mb-4 text-sm font-semibold">Certifications</h3>
+              <ul class="space-y-3">
+                {
+                  site.certifications.map((c) => (
+                    <li>
+                      <p class="text-sm">{c.name}</p>
+                      <p class="mt-0.5 font-mono text-xs text-subtle">
+                        {"issuer" in c ? `${c.issuer} · ` : ""}{c.date}
+                      </p>
+                    </li>
+                  ))
+                }
+              </ul>
+            </div>
+            <div>
+              <h3 class="mb-4 text-sm font-semibold">Education</h3>
+              <ul class="space-y-3">
+                {
+                  site.education.map((e) => (
+                    <li>
+                      <p class="text-sm">{e.degree}</p>
+                      <p class="mt-0.5 text-xs text-muted">{e.school}</p>
+                      <p class="mt-0.5 font-mono text-xs text-subtle">{e.period}</p>
+                    </li>
+                  ))
+                }
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="mx-auto max-w-5xl px-4 py-24 sm:px-6">
+      <div data-reveal class="relative isolate overflow-hidden rounded-3xl border border-line bg-card px-6 py-14 text-center sm:px-12">
+        <div class="hero-bg pointer-events-none absolute inset-0 -z-10 opacity-70" aria-hidden="true"></div>
+        <p class="font-mono text-xs text-accent">// contact</p>
+        <h2 class="mx-auto mt-3 max-w-xl text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
+          Have a product that needs building? Let's talk.
+        </h2>
+        <p class="mx-auto mt-4 max-w-lg text-muted">
+          Whether it's a role, a project or a question, email is the quickest way to reach me.
+        </p>
+        <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
+          <a
+            href={`mailto:${site.email}`}
+            class="inline-flex h-11 items-center gap-2 rounded-lg bg-fg px-5 text-sm font-medium text-bg transition-opacity hover:opacity-90"
+          >
+            <Icon name="mail" class="size-4" />
+            {site.email}
+          </a>
+          <button
+            type="button"
+            data-copy={site.email}
+            class="group/copy inline-flex h-11 items-center gap-2 rounded-lg border border-line bg-bg px-4 text-sm font-medium transition-colors hover:bg-card-hover"
+          >
+            <span class="contents group-data-[copied]/copy:hidden">
+              <Icon name="copy" class="size-4" /> Copy
+            </span>
+            <span class="hidden items-center gap-2 text-emerald-500 group-data-[copied]/copy:inline-flex" aria-live="polite">
+              <Icon name="check" class="size-4" /> Copied
+            </span>
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-line">
+    <div class="mx-auto flex max-w-5xl flex-col items-center justify-between gap-4 px-4 py-8 text-sm text-subtle sm:flex-row sm:px-6">
+      <p>© {year} {site.name}. Built with Astro and Tailwind CSS.</p>
+      <ul class="flex items-center gap-4">
+        {
+          site.socials.map((s) => (
+            <li>
+              <a href={s.href} target="_blank" rel="noopener noreferrer" class="transition-colors hover:text-fg">
+                {s.label}
+              </a>
+            </li>
+          ))
+        }
+        <li>
+          <a href={site.cv} download class="transition-colors hover:text-fg">CV</a>
+        </li>
+      </ul>
+    </div>
+  </footer>
+</Base>

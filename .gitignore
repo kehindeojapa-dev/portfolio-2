@@ -1,4 +1,17 @@
-testing.txt
+# build output
+dist/
+.astro/
+
+# dependencies
+node_modules/
+
+# env
+.env
+.env.*
+
+# misc
 .DS_Store
+testing.txt
+
 # Local Netlify folder
 .netlify

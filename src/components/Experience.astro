@@ -1,0 +1,56 @@
+---
+import { visibleExperience } from "../data/experience";
+---
+
+{
+  visibleExperience.length > 0 && (
+    <section id="experience" class="mx-auto max-w-5xl px-4 pb-20 sm:px-6">
+      <div class="mb-10">
+        <p class="font-mono text-xs text-accent">// experience</p>
+        <h2 class="mt-2 text-3xl font-semibold tracking-tight">Where I've worked</h2>
+      </div>
+      <ol class="relative border-l border-line">
+        {visibleExperience.map((role, i) => (
+          <li data-reveal class="relative pb-10 pl-8 last:pb-0">
+            <span
+              class:list={[
+                "absolute top-1.5 -left-[5px] size-2.5 rounded-full border-2 border-bg",
+                i === 0 ? "bg-accent" : "bg-line",
+              ]}
+              aria-hidden="true"
+            />
+            <div class="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6">
+              <h3 class="font-semibold tracking-tight">
+                {role.title} <span class="text-muted">· {role.company}</span>
+              </h3>
+              <p class="shrink-0 font-mono text-xs text-subtle">{role.period}</p>
+            </div>
+            {(role.type || role.location) && (
+              <p class="mt-1 flex flex-wrap items-center gap-2 text-xs text-subtle">
+                {role.type && (
+                  <span
+                    class:list={[
+                      "rounded border px-1.5 py-px font-mono text-[10px]",
+                      role.type === "Full-time" ? "border-accent/40 text-accent" : "border-line text-muted",
+                    ]}
+                  >
+                    {role.type}
+                  </span>
+                )}
+                {role.location && <span>{role.location}</span>}
+              </p>
+            )}
+            {role.summary && <p class="mt-2 max-w-2xl text-sm text-muted">{role.summary}</p>}
+            {role.projects && role.projects.length > 0 && (
+              <ul class="mt-3 flex flex-wrap gap-1.5" aria-label="Projects">
+                {role.projects.map((p) => (
+                  <li class="rounded-full border border-line px-2.5 py-0.5 text-xs text-muted">{p}</li>
+                ))}
+              </ul>
+            )}
+          </li>
+        ))}
+      </ol>
+    </section>
+  )
+}

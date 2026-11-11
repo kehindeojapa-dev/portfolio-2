@@ -1,0 +1,145 @@
+---
+import { Image } from "astro:assets";
+import { getCollection } from "astro:content";
+import ProjectLinks from "./ProjectLinks.astro";
+import Icon from "./Icon.astro";
+import type { Project } from "../data/projects";
+
+interface Props {
+  project: Project;
+  index: number;
+}
+const { project, index } = Astro.props;
+const number = String(index + 1).padStart(2, "0");
+const caseStudy = (
+  await getCollection("caseStudies", (e) => import.meta.env.DEV || !e.data.draft)
+).find((e) => e.data.project === project.title);
+---
+
+<article
+  data-reveal
+  class="group grid overflow-hidden rounded-2xl border border-line bg-card hover:border-accent/30 md:grid-cols-[1.15fr_1fr]"
+>
+  <div class="flex flex-col gap-5 p-6 sm:p-8">
+    <div class="flex items-center gap-3 font-mono text-xs text-subtle">
+      <span class="text-accent">{number}</span>
+      {project.context && (
+        <>
+          <span class="h-px w-6 bg-line" aria-hidden="true" />
+          <span>{project.context}</span>
+        </>
+      )}
+    </div>
+
+    <div class="space-y-2">
+      <h3 class="text-2xl font-semibold tracking-tight">{project.title}</h3>
+      <p class="text-pretty text-muted">{project.summary}</p>
+    </div>
+
+    {project.role && <p class="font-mono text-xs text-fg/80"><span class="text-subtle">Role:</span> {project.role}</p>}
+
+    {
+      project.highlights && (
+        <ul class="space-y-2 text-sm text-muted">
+          {project.highlights.map((h) => (
+            <li class="flex gap-3">
+              <span class="mt-2 size-1 shrink-0 rounded-full bg-accent" aria-hidden="true" />
+              <span>{h}</span>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+
+    <ul class="flex flex-wrap gap-1.5" aria-label="Tags">
+      {
+        project.tags.map((t) => (
+          <li class="rounded-full bg-accent-soft px-2.5 py-1 font-mono text-[11px] text-accent">{t}</li>
+        ))
+      }
+    </ul>
+
+    <div class="mt-auto flex flex-wrap items-center gap-2 pt-2">
+      {
+        caseStudy && (
+          <a
+            href={`/work/${caseStudy.id}/`}
+            class="nudge-x inline-flex h-9 items-center gap-2 rounded-md bg-fg px-3.5 text-sm font-medium text-bg transition-opacity hover:opacity-90"
+          >
+            Read case study
+            <Icon name="arrow-right" class="size-3.5" />
+          </a>
+        )
+      }
+      {
+        project.links.length > 0 ? (
+          <ProjectLinks project={project} />
+        ) : (
+          <p class="inline-flex h-9 items-center rounded-md border border-dashed border-line px-3.5 text-sm text-subtle">
+            Not publicly available
+          </p>
+        )
+      }
+    </div>
+  </div>
+
+  <div class="relative aspect-[5/4] overflow-hidden border-t border-line bg-bg md:aspect-auto md:min-h-80 md:border-t-0 md:border-l">
+    {
+      project.image && project.framed ? (
+        <div class="absolute inset-0 hero-bg-static grid place-items-center p-4 sm:p-6">
+          <Image
+            src={project.image}
+            alt={`${project.title} screenshots`}
+            widths={[480, 720, 960, 1200]}
+            sizes="(min-width: 768px) 440px, 100vw"
+            class="relative max-h-full w-full object-contain transition-transform duration-500 group-hover:scale-[1.02] motion-reduce:group-hover:scale-100"
+          />
+        </div>
+      ) : project.image ? (
+        <Image
+          src={project.image}
+          alt={`${project.title} screenshot`}
+          widths={[480, 720, 960]}
+          sizes="(min-width: 768px) 440px, 100vw"
+          class="absolute inset-0 size-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
+        />
+      ) : project.mockup === "browser" ? (
+        <div class="absolute inset-0 grid place-items-center hero-bg p-6">
+          <div class="flex aspect-[16/10] w-full max-w-80 flex-col overflow-hidden rounded-xl border border-line bg-card shadow-2xl shadow-black/20 transition-transform duration-500 group-hover:-translate-y-1">
+            <div class="flex items-center gap-1.5 border-b border-line px-3 py-2">
+              <span class="size-2 rounded-full bg-line" />
+              <span class="size-2 rounded-full bg-line" />
+              <span class="size-2 rounded-full bg-line" />
+              <span class="ml-2 h-3 flex-1 rounded bg-bg" />
+            </div>
+            <div class="flex flex-1 gap-2 p-2">
+              <div class="w-1/4 space-y-1.5 rounded-md bg-bg p-2">
+                <div class="h-1.5 rounded bg-line" />
+                <div class="h-1.5 w-3/4 rounded bg-line" />
+                <div class="h-1.5 w-2/3 rounded bg-line" />
+              </div>
+              <div class="flex flex-1 flex-col items-center justify-center gap-2 rounded-md bg-accent-soft">
+                <span class="grid size-9 place-items-center rounded-lg bg-accent text-sm font-semibold text-bg">
+                  {project.title.charAt(0)}
+                </span>
+                <span class="px-2 text-center font-mono text-[10px] text-muted">{project.title}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div class="absolute inset-0 grid place-items-center hero-bg">
+          <div class="flex aspect-[9/19] w-32 flex-col rounded-[1.75rem] border border-line bg-card p-2 shadow-2xl shadow-black/20 transition-transform duration-500 group-hover:-translate-y-1">
+            <div class="mx-auto mb-3 h-1.5 w-10 rounded-full bg-line" />
+            <div class="flex flex-1 flex-col items-center justify-center gap-2 rounded-[1.25rem] bg-accent-soft">
+              <span class="grid size-11 place-items-center rounded-xl bg-accent font-semibold text-bg">
+                {project.title.charAt(0)}
+              </span>
+              <span class="px-2 text-center font-mono text-[10px] text-muted">{project.title}</span>
+            </div>
+          </div>
+        </div>
+      )
+    }
+  </div>
+</article>

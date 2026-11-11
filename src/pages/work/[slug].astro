@@ -1,0 +1,61 @@
+---
+import { getCollection, render } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import Header from "../../components/Header.astro";
+import Icon from "../../components/Icon.astro";
+import { site } from "../../data/site";
+
+export async function getStaticPaths() {
+  const entries = await getCollection("caseStudies", (e) => import.meta.env.DEV || !e.data.draft);
+  return entries.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const { title, summary, role, stack, draft } = entry.data;
+---
+
+<Base title={`${title} · Case study · ${site.name}`} description={summary}>
+  <Header />
+  <main id="main" class="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-24">
+    {
+      draft && (
+        <p class="mb-8 rounded-lg border border-dashed border-amber-500/50 bg-amber-500/10 px-4 py-3 text-sm text-amber-600 dark:text-amber-400">
+          Draft: only visible in local dev. Fill in the TODOs, then set <code class="font-mono">draft: false</code> to publish.
+        </p>
+      )
+    }
+    <a href="/#work" class="inline-flex items-center gap-1.5 text-sm text-muted transition-colors hover:text-fg">
+      <Icon name="arrow-left" class="size-3.5" />
+      All work
+    </a>
+
+    <header class="mt-8 border-b border-line pb-10">
+      <p class="font-mono text-xs text-accent">// case study</p>
+      <h1 class="hero-in mt-3 text-4xl font-semibold tracking-tight text-balance sm:text-5xl">{title}</h1>
+      <p style="--i:1" class="hero-in mt-5 text-lg text-pretty text-muted">{summary}</p>
+      <dl style="--i:2" class="hero-in mt-8 grid gap-6 sm:grid-cols-2">
+        {
+          role && (
+            <div>
+              <dt class="text-xs text-subtle">Role</dt>
+              <dd class="mt-1 text-sm">{role}</dd>
+            </div>
+          )
+        }
+        {
+          stack.length > 0 && (
+            <div>
+              <dt class="text-xs text-subtle">Stack</dt>
+              <dd class="mt-1 text-sm">{stack.join(" · ")}</dd>
+            </div>
+          )
+        }
+      </dl>
+    </header>
+
+    <article class="case-study mt-10">
+      <Content />
+    </article>
+  </main>
+</Base>
