@@ -1,0 +1,443 @@
+---
+/**
+ * Printable one-page A4 CV. Content comes from src/data/site.ts and
+ * src/data/experience.ts, so the CV and the website stay in sync.
+ * Regenerate the downloadable PDF with: npm run cv:pdf
+ */
+import "@fontsource-variable/inter";
+import "@fontsource-variable/jetbrains-mono";
+import { site } from "../data/site";
+import { visibleExperience } from "../data/experience";
+
+const portfolio = Astro.site?.host ?? "kehindeojapa.netlify.app";
+const github = site.socials.find((s) => s.icon === "github")!;
+const linkedin = site.socials.find((s) => s.icon === "linkedin")!;
+const shortUrl = (href: string) => href.replace(/^https?:\/\/(www\.)?/, "");
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>{site.name}, CV</title>
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+  </head>
+  <body>
+    <div class="toolbar">
+      <a href="/">← Back to portfolio</a>
+      <a class="primary" href={site.cv} download>Download PDF</a>
+    </div>
+
+    <main class="sheet">
+      <header class="head">
+        <h1>{site.name}</h1>
+        <p class="role">{site.role} · Web &amp; Mobile</p>
+        <ul class="contact">
+          <li>{site.phone}</li>
+          <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+          <li>{site.location}</li>
+          <li><a href={Astro.site?.toString()}>{portfolio}</a></li>
+          <li><a href={github.href}>{shortUrl(github.href)}</a></li>
+          <li><a href={linkedin.href}>{shortUrl(linkedin.href).replace(/\/$/, "")}</a></li>
+        </ul>
+      </header>
+
+      <div class="cols">
+        <div class="main">
+          <section>
+            <h2>Profile</h2>
+            {site.cvProfile.map((p) => <p class="profile">{p}</p>)}
+          </section>
+
+          <section>
+            <h2>Experience</h2>
+            <ol class="timeline">
+              {
+                visibleExperience.map((r) => (
+                  <li>
+                    <div class="job-head">
+                      <h3>{r.title}</h3>
+                      <span class="period">{r.period}</span>
+                    </div>
+                    <p class="company">
+                      <strong>{r.company}</strong>
+                      {r.type && <span class="type">{r.type}</span>}
+                      {r.location && <span> · {r.location}</span>}
+                    </p>
+                    <ul class="bullets">
+                      {(r.bullets ?? (r.summary ? [r.summary] : [])).map((b) => (
+                        <li>{b}</li>
+                      ))}
+                    </ul>
+                  </li>
+                ))
+              }
+            </ol>
+          </section>
+        </div>
+
+        <aside class="side">
+          <section>
+            <h2>Skills</h2>
+            {
+              site.skills
+                .filter((g) => g.group !== "Practices")
+                .map((g) => (
+                  <div class="skill-group">
+                    <h4>{g.group}</h4>
+                    <ul class="chips">
+                      {g.items.map((i) => (
+                        <li>{i}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ))
+            }
+          </section>
+
+          <section>
+            <h2>Domains</h2>
+            <ul class="dots">{site.domains.map((d) => <li>{d}</li>)}</ul>
+          </section>
+
+          <section>
+            <h2>Certifications</h2>
+            {
+              site.certifications.map((c) => (
+                <div class="item">
+                  <p class="item-title">{c.name}</p>
+                  <p class="item-meta">
+                    {"issuer" in c ? `${c.issuer} · ` : ""}
+                    {c.date}
+                  </p>
+                </div>
+              ))
+            }
+          </section>
+
+          <section>
+            <h2>Education</h2>
+            {
+              site.education.map((e) => (
+                <div class="item">
+                  <p class="item-title">{e.degree}</p>
+                  <p class="item-meta">{e.school}</p>
+                  <p class="item-meta">{e.period}</p>
+                  {e.activities && (
+                    <p class="item-meta">
+                      <strong>Activities:</strong> {e.activities}
+                    </p>
+                  )}
+                </div>
+              ))
+            }
+          </section>
+        </aside>
+      </div>
+    </main>
+  </body>
+</html>
+
+<style is:global>
+  @page {
+    size: A4;
+    margin: 0;
+  }
+  :root {
+    --ink: #18181b;
+    --muted: #52525b;
+    --subtle: #71717a;
+    --line: #e4e4e7;
+    --navy: #0b1220;
+    --accent: #2563eb;
+    --accent-soft: #e8efff;
+    --side: #f6f7f9;
+  }
+  * {
+    box-sizing: border-box;
+  }
+  html {
+    background: #e4e4e7;
+  }
+  body {
+    margin: 0;
+    font-family: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+    color: var(--ink);
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    font-feature-settings: "cv11", "ss01";
+  }
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .toolbar {
+    display: flex;
+    justify-content: space-between;
+    max-width: 210mm;
+    margin: 24px auto 12px;
+    padding: 0 16px;
+    font-size: 14px;
+  }
+  .toolbar a {
+    padding: 8px 14px;
+    border-radius: 8px;
+    color: var(--muted);
+  }
+  .toolbar a.primary {
+    background: var(--ink);
+    color: #fff;
+    font-weight: 500;
+  }
+
+  .sheet {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto 48px;
+    background: #fff;
+    box-shadow: 0 10px 40px rgb(0 0 0 / 0.12);
+    display: flex;
+    flex-direction: column;
+    font-size: 8.4pt;
+    line-height: 1.42;
+  }
+
+  .head {
+    background: var(--navy);
+    color: #fff;
+    padding: 9mm 14mm 6.5mm;
+    border-bottom: 2.5px solid var(--accent);
+  }
+  .head h1 {
+    margin: 0;
+    font-size: 24pt;
+    font-weight: 650;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+  .role {
+    margin: 2.5mm 0 0;
+    font-family: "JetBrains Mono Variable", ui-monospace, monospace;
+    font-size: 8.6pt;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #93b4ff;
+  }
+  .contact {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.6mm 5mm;
+    margin: 4mm 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: 7.6pt;
+    color: #d4d4d8;
+  }
+
+  .cols {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 62mm;
+  }
+  .main {
+    padding: 6mm 8mm 6mm 14mm;
+  }
+  .side {
+    background: var(--side);
+    border-left: 1px solid var(--line);
+    padding: 6mm 9mm 6mm 7mm;
+  }
+
+  h2 {
+    display: flex;
+    align-items: center;
+    gap: 3mm;
+    margin: 0 0 2.5mm;
+    font-family: "JetBrains Mono Variable", ui-monospace, monospace;
+    font-size: 7.6pt;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  h2::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+  section + section {
+    margin-top: 4.5mm;
+  }
+
+  .profile {
+    margin: 0 0 1.5mm;
+    color: var(--muted);
+  }
+
+  .timeline {
+    margin: 0;
+    padding: 0 0 0 4mm;
+    list-style: none;
+    border-left: 1px solid var(--line);
+  }
+  .timeline > li {
+    position: relative;
+    padding-bottom: 2.8mm;
+  }
+  .timeline > li:last-child {
+    padding-bottom: 0;
+  }
+  .timeline > li::before {
+    content: "";
+    position: absolute;
+    left: calc(-4mm - 3.5px);
+    top: 1.3mm;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #fff;
+    border: 1.5px solid var(--accent);
+  }
+  .job-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 4mm;
+  }
+  .job-head h3 {
+    margin: 0;
+    font-size: 9.4pt;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .period {
+    flex-shrink: 0;
+    padding: 0.6mm 2.2mm;
+    border-radius: 99px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-family: "JetBrains Mono Variable", ui-monospace, monospace;
+    font-size: 7pt;
+    font-weight: 500;
+  }
+  .company {
+    margin: 0.4mm 0 1mm;
+    color: var(--subtle);
+  }
+  .type {
+    display: inline-block;
+    margin-left: 1.6mm;
+    padding: 0 1.6mm;
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    font-size: 6.8pt;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: var(--muted);
+    vertical-align: 0.3mm;
+  }
+  .company strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .bullets {
+    margin: 0;
+    padding-left: 3.6mm;
+    list-style: disc;
+    color: var(--muted);
+  }
+  .bullets li {
+    margin: 0.5mm 0;
+  }
+  .bullets li::marker {
+    color: var(--accent);
+  }
+
+  .skill-group + .skill-group {
+    margin-top: 2mm;
+  }
+  h4 {
+    margin: 0 0 1.4mm;
+    font-size: 6.8pt;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--subtle);
+  }
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.1mm;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .chips li {
+    padding: 0.3mm 1.8mm;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    background: #fff;
+    font-size: 7.3pt;
+  }
+  .dots {
+    margin: 0;
+    padding-left: 3.6mm;
+    list-style: disc;
+  }
+  .dots li {
+    margin: 0.3mm 0;
+  }
+  .dots li::marker {
+    color: var(--accent);
+  }
+  .item + .item {
+    margin-top: 2mm;
+  }
+  .item-title {
+    margin: 0;
+    font-weight: 600;
+  }
+  .item-meta {
+    margin: 0.4mm 0 0;
+    color: var(--subtle);
+    font-size: 7.8pt;
+  }
+  .item-meta strong {
+    color: var(--muted);
+    font-weight: 600;
+  }
+
+  @media screen and (max-width: 800px) {
+    .sheet {
+      width: auto;
+      margin: 0 16px 32px;
+      min-height: 0;
+    }
+    .cols {
+      grid-template-columns: 1fr;
+    }
+    .side {
+      border-left: 0;
+      border-top: 1px solid var(--line);
+    }
+  }
+
+  @media print {
+    html {
+      background: #fff;
+    }
+    .toolbar {
+      display: none;
+    }
+    .sheet {
+      margin: 0;
+      box-shadow: none;
+      height: 297mm;
+      overflow: hidden;
+    }
+  }
+</style>

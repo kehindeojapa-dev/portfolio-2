@@ -76,24 +76,117 @@
   mask-image: linear-gradient(to bottom, black 40%, transparent);
 }
 
+/* Same grid + glow, unmasked, behind framed project screenshots */
+.hero-bg-static {
+  background-image:
+    radial-gradient(ellipse 70% 60% at 50% 30%, var(--glow), transparent 70%),
+    linear-gradient(to right, color-mix(in oklab, var(--line) 60%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, var(--line) 60%, transparent) 1px, transparent 1px);
+  background-size: 100% 100%, 32px 32px, 32px 32px;
+}
+
+/* Hero entrance: short staggered fade-up on load */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+.hero-in {
+  animation: rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(var(--i, 0) * 80ms + 60ms);
+}
+
 /* Scroll reveal: progressive enhancement, only when JS has run */
 .js [data-reveal] {
   opacity: 0;
   transform: translateY(12px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.2s ease,
+    translate 0.3s ease;
+  transition-delay: var(--reveal-delay, 0ms), var(--reveal-delay, 0ms), 0ms, 0ms;
 }
 .js [data-reveal].is-visible {
   opacity: 1;
   transform: none;
 }
 
+/* Header gains a border once the page scrolls */
+[data-header] {
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+[data-header][data-scrolled] {
+  border-color: var(--line);
+}
+
+/* Nudge the arrow inside a link on hover */
+.nudge svg {
+  transition: transform 0.2s ease;
+}
+.nudge:hover svg {
+  transform: translateY(2px);
+}
+.nudge-x svg {
+  transition: transform 0.2s ease;
+}
+.nudge-x:hover svg {
+  transform: translateX(2px);
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+  .hero-in {
+    animation: none;
+  }
+  .nudge:hover svg,
+  .nudge-x:hover svg {
+    transform: none;
   }
   .js [data-reveal] {
     opacity: 1;
     transform: none;
     transition: none;
   }
+}
+
+/* Long-form case study content */
+.case-study {
+  color: var(--muted);
+  line-height: 1.75;
+}
+.case-study h2 {
+  margin: 2.5rem 0 0.75rem;
+  color: var(--fg);
+  font-size: 1.375rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.case-study h3 {
+  margin: 1.75rem 0 0.5rem;
+  color: var(--fg);
+  font-weight: 600;
+}
+.case-study p,
+.case-study ul {
+  margin: 0.75rem 0;
+}
+.case-study ul {
+  padding-left: 1.25rem;
+  list-style: disc;
+}
+.case-study li::marker {
+  color: var(--accent);
+}
+.case-study strong {
+  color: var(--fg);
+  font-weight: 600;
+}
+.case-study a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }

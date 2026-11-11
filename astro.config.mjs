@@ -7,7 +7,7 @@ const site = "https://kehindeojapa.netlify.app";
 
 export default defineConfig({
   site,
-  integrations: [sitemap()],
+  integrations: [sitemap({ filter: (page) => !page.endsWith("/cv/") })],
   vite: {
     plugins: [tailwindcss()],
   },

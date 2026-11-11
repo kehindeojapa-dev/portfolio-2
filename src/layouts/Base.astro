@@ -77,8 +77,19 @@ const ogImage = new URL("/og.png", Astro.site);
         });
       });
 
-      // Scroll reveal
-      const items = document.querySelectorAll("[data-reveal]");
+      // Header border once scrolled
+      const header = document.querySelector<HTMLElement>("[data-header]");
+      const onScroll = () => header?.toggleAttribute("data-scrolled", scrollY > 8);
+      onScroll();
+      addEventListener("scroll", onScroll, { passive: true });
+
+      // Scroll reveal, with a small stagger for cards that share a grid row
+      const items = document.querySelectorAll<HTMLElement>("[data-reveal]");
+      items.forEach((el) => {
+        const siblings = [...(el.parentElement?.children ?? [])].filter((c) => c.hasAttribute("data-reveal"));
+        const cols = el.parentElement?.classList.contains("grid") ? 3 : 1;
+        if (cols > 1) el.style.setProperty("--reveal-delay", `${(siblings.indexOf(el) % cols) * 90}ms`);
+      });
       if ("IntersectionObserver" in window) {
         const io = new IntersectionObserver(
           (entries) => {
